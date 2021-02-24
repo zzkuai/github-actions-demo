@@ -1,8 +1,10 @@
 name: GitHub Actions Build and Deploy Demo
+
 on:
   push:
     branches:
       - master
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -22,3 +24,12 @@ jobs:
         with:
           branch: gh-pages
           folder: "dist"
+
+      - name: Deploy to Cloud Server
+        uses: wlixcc/SFTP-Deploy-Action@v1.0
+        with:
+          username: "root"
+          server: ${{secrets.SERVER_IP}}
+          ssh_private_key: ${{secrets.SSH_PRIVATE_KEY}}
+          local_path: "./dist/*"
+          remote_path: "/var/www/web/vue-app"
